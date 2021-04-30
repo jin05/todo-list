@@ -16,7 +16,12 @@ const Home = (props: { initialAuth: AuthTokens }) => {
   const auth = useAuth(props.initialAuth);
   const { login, logout } = useAuthFunctions();
 
-  useEffect(() => {}, [auth]);
+  useEffect(() => {
+    if (auth) {
+      window.localStorage.setItem("auth", JSON.stringify(auth));
+      return;
+    }
+  }, [auth]);
 
   return (
     <React.Fragment>
@@ -39,7 +44,15 @@ export const getServerSideProps: GetServerSideProps<{
   initialAuth: AuthTokens;
 }> = async (context) => {
   const initialAuth = getServerSideAuth(context.req);
-
+  console.log(initialAuth);
+  if (initialAuth) {
+    const res = await fetch("http://localhost:8080/user", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: initialAuth.idToken }),
+    });
+    console.log(await res.json());
+  }
   return { props: { initialAuth } };
 };
 
