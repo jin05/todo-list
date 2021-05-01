@@ -12,6 +12,8 @@ module.exports = (phase) => {
           REDIRECT_SIGN_IN: "http://localhost:3000/token",
           REDIRECT_SIGN_OUT: "http://localhost:3000/",
           AUTH_COOKIE_DOMAIN: "localhost",
+          PEMS_JSON_FILE_NAME: "local_pems.json",
+          API_HOST: "http://localhost:8080/user",
         },
       };
     default:
@@ -24,6 +26,8 @@ module.exports = (phase) => {
           REDIRECT_SIGN_IN: "http://localhost:3000/token",
           REDIRECT_SIGN_OUT: "http://localhost:3000/",
           AUTH_COOKIE_DOMAIN: "localhost",
+          PEMS_JSON_FILE_NAME: "pems.json",
+          API_HOST: "http://localhost:8080/user",
         },
       };
   }

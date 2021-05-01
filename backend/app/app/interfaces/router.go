@@ -1,52 +1,29 @@
 package interfaces
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
-	"io/ioutil"
 	"log"
 	"net/http"
+	"todo-list/app/config"
+	"todo-list/app/interfaces/api"
+	"todo-list/app/interfaces/middleware"
 )
 
-func Dispatch() error {
+func Dispatch(config *config.Config, middlewares middleware.Middlewares, api *api.API) error {
 	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/", rootPage).Methods("GET")
-	router.HandleFunc("/user", signup).Methods("POST")
+	for _, mw := range middlewares.List() {
+		router.Use(mw)
+	}
 
-	return http.ListenAndServe(fmt.Sprintf(":%d", 8080), router)
+	router.HandleFunc("/", rootPage).Methods("GET")
+	router.HandleFunc("/user", api.UserApi.Signup).Methods("POST")
+
+	return http.ListenAndServe(fmt.Sprintf(":%s", config.Server.ListenPort), router)
 }
 
 func rootPage(w http.ResponseWriter, _ *http.Request) {
 	if _, err := fmt.Fprintf(w, "success"); err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
-}
-
-func signup(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	token := vars["token"]
-	fmt.Println(token)
-
-	reqBody, _ := ioutil.ReadAll(r.Body)
-	var input SignupInput
-	if err := json.Unmarshal(reqBody, &input); err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println(input)
-
-	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(User{ID: "id", UserName: "test"}); err != nil {
-		log.Fatal(err)
-	}
-}
-
-type User struct {
-	ID       string
-	UserName string
-}
-
-type SignupInput struct {
-	Token string `json:"token"`
 }

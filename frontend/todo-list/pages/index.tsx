@@ -8,20 +8,28 @@ import {
 } from "aws-cognito-next";
 
 import pems from "../local_pems.json";
+import localPems from "../local_pems.json";
 
-const getServerSideAuth = createGetServerSideAuth({ pems });
-const useAuth = createUseAuth({ pems });
+const getServerSideAuth = createGetServerSideAuth({
+  pems: process.env.NODE_ENV === "production" ? pems : localPems,
+});
+const useAuth = createUseAuth({
+  pems: process.env.NODE_ENV === "production" ? pems : localPems,
+});
 
-const Home = (props: { initialAuth: AuthTokens }) => {
+const Home = (props: {
+  initialAuth: AuthTokens;
+  userJson: string | undefined;
+}) => {
   const auth = useAuth(props.initialAuth);
   const { login, logout } = useAuthFunctions();
 
   useEffect(() => {
-    if (auth) {
-      window.localStorage.setItem("auth", JSON.stringify(auth));
-      return;
+    console.log(props.userJson);
+    if (props.userJson) {
+      window.localStorage.setItem("user", props.userJson);
     }
-  }, [auth]);
+  }, [props.userJson]);
 
   return (
     <React.Fragment>
@@ -42,18 +50,24 @@ const Home = (props: { initialAuth: AuthTokens }) => {
 
 export const getServerSideProps: GetServerSideProps<{
   initialAuth: AuthTokens;
+  userJson: string | undefined;
 }> = async (context) => {
   const initialAuth = getServerSideAuth(context.req);
-  console.log(initialAuth);
+  let userJson: string | undefined;
   if (initialAuth) {
-    const res = await fetch("http://localhost:8080/user", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token: initialAuth.idToken }),
-    });
-    console.log(await res.json());
+    const res = await fetch(
+      process.env.API_HOST || "http://localhost:8080/user",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: initialAuth.idToken,
+        },
+      }
+    );
+    userJson = await res.json();
   }
-  return { props: { initialAuth } };
+  return { props: { initialAuth, userJson } };
 };
 
 export default Home;
