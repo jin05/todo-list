@@ -6,7 +6,8 @@
     "build": "next build",
     "start": "next start",
     "type-check": "tsc",
-    "format": "prettier --write \"**/*.{js,ts,tsx}\""
+    "format": "prettier --write \"**/*.{js,ts,tsx}\"",
+    "deploy": "AWS_PROFILE=todo npx serverless"
   },
   "dependencies": {
     "@aws-amplify/auth": "^3.4.30",

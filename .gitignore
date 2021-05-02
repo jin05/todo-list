@@ -15,3 +15,5 @@
 # vendor/
 backend/app/todo-list
 backend/app/db/sql/diff.sql
+frontend/todo-list/.serverless
+frontend/todo-list/.serverless_nextjs
