@@ -14,9 +14,7 @@ RUN apk update && apk add --no-cache go \
         gcc \
         gnupg \
         libgcc \
-        linux-headers \
-        make \
-        python
+        linux-headers
 ADD . .
 RUN go build && strip todo-list
 
