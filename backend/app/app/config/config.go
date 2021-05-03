@@ -48,7 +48,6 @@ type envConfig struct {
 	DBName       string `envconfig:"DB_NAME"`
 	DBSecretName string `envconfig:"DB_SECRET_NAME"`
 
-	AWSRegion           string `envconfig:"AWS_REGION" required:"true"`
 	AwsUserPoolId       string `envconfig:"AWS_USER_POOL_ID" required:"true"`
 	AwsUserPoolClientId string `envconfig:"AWS_USER_POOL_CLIENT_ID" required:"true"`
 }
@@ -80,7 +79,7 @@ func NewConfig() (*Config, error) {
 	}
 
 	awsConfig := &aws.Config{
-		Region: aws.String(env.AWSRegion),
+		Region: aws.String("ap-northeast-1"),
 	}
 
 	conf.AWS = AWSConfig{

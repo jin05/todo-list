@@ -13,6 +13,5 @@ export DB_NAME
 
 export DB_SECRET_NAME
 
-export AWS_REGION
 export AWS_USER_POOL_ID
 export AWS_USER_POOL_CLIENT_ID

@@ -12,6 +12,5 @@ local:
 	$(eval DB_NAME := todo-list)
 
 	@# AWS
-	$(eval AWS_REGION := ap-northeast-1)
 	$(eval AWS_USER_POOL_ID := ap-northeast-1_axGAoF8m8)
 	$(eval AWS_USER_POOL_CLIENT_ID := 6u3mjd9gmvo638193q9ci4lmi6)
