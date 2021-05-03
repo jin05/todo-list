@@ -1,0 +1,59 @@
+service: todo
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+# frameworkVersion: "=X.X.X"
+
+plugins:
+  - serverless-prune-plugin
+
+provider:
+  name: aws
+  profile: todo
+
+  stage: prod
+  region: ap-northeast-1
+
+  memorySize: 3008
+  timeout: 900
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "logs:CreateLogGroup"
+        - "logs:CreateLogStream"
+        - "logs:PutLogEvents"
+      Resource:
+        - "*"
+    - Effect: "Allow"
+      Action:
+        - "secretsmanager:Describe*"
+        - "secretsmanager:Get*"
+        - "secretsmanager:List*"
+      Resource:
+        - "*"
+
+custom:
+  environment:
+    ENV_NAME: ${env:ENV_NAME}
+    LISTEN_PORT: ${env:LISTEN_PORT}
+    ALLOW_ORIGIN: ${env:ALLOW_ORIGIN}
+
+    AWS_REGION: ${env:AWS_REGION}
+    AWS_USER_POOL_ID: ${env:AWS_USER_POOL_ID}
+    AWS_USER_POOL_CLIENT_ID: ${env:AWS_USER_POOL_CLIENT_ID}
+
+    DB_SECRET_NAME: ${env:DB_SECRET_NAME}
+
+  prune:
+    automatic: true
+    number: 3
+
+functions:
+  todo:
+    image: 387402613703.dkr.ecr.ap-northeast-1.amazonaws.com/todo-list:${env:IMAGE_TAG}
+    environment: ${self:custom.environment}
+    events:
+      - httpApi:
+          method: POST
+          path: /user

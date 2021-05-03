@@ -12,9 +12,9 @@ phases:
     commands:
       - echo Building the Docker image...
       - cd backend/app
-      - docker build ./ -t todo-list:$IMAGE_TAG -f $DOCKERFILE_PATH
-      - docker tag todo-list:$IMAGE_TAG 387402613703.dkr.ecr.ap-northeast-1.amazonaws.com/todo-list:$IMAGE_TAG
+      - docker build ./ -t $IMAGE_REPO:$IMAGE_TAG -f $DOCKERFILE_PATH
+      - docker tag $IMAGE_REPO:$IMAGE_TAG 387402613703.dkr.ecr.ap-northeast-1.amazonaws.com/$IMAGE_REPO:$IMAGE_TAG
   post_build:
     commands:
       - echo Pushing the Docker image...
-      - docker push 387402613703.dkr.ecr.ap-northeast-1.amazonaws.com/todo-list:$IMAGE_TAG
+      - docker push 387402613703.dkr.ecr.ap-northeast-1.amazonaws.com/$IMAGE_REPO:$IMAGE_TAG
