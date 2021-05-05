@@ -17,6 +17,14 @@ provider:
   memorySize: 3008
   timeout: 900
 
+  vpc:
+    securityGroupIds:
+      - sg-09dabb1ffa511d35d
+    subnetIds:
+      - subnet-08091c2900729c379
+      - subnet-06521dec4fb148ce4
+      - subnet-067c0209c02730662
+
   iamRoleStatements:
     - Effect: "Allow"
       Action:
