@@ -29,9 +29,11 @@ func (i *userAPI) Signup(w http.ResponseWriter, r *http.Request) {
 	user, err := i.userUseCase.Create(cUser.AuthID, cUser.Name, cUser.Email)
 	if err != nil {
 		log.Println(err)
+		http.Error(w, "InternalServerError", http.StatusInternalServerError)
 	}
 
 	if err = json.NewEncoder(w).Encode(user); err != nil {
 		log.Println(err)
+		http.Error(w, "InternalServerError", http.StatusInternalServerError)
 	}
 }
