@@ -13,7 +13,7 @@ type Connection struct {
 }
 
 func NewDB(conf *config.Config) (*Connection, error) {
-	protocol := fmt.Sprintf("tcp(%s:%s)", conf.DB.Host, conf.DB.Port)
+	protocol := fmt.Sprintf("tcp(%s:%d)", conf.DB.Host, conf.DB.Port)
 	connect := fmt.Sprintf(
 		"%s:%s@%s/%s?parseTime=true&charset=utf8mb4",
 		conf.DB.User,
