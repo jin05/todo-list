@@ -41,8 +41,8 @@ func Dispatch(config *config.Config, middlewares middleware.Middlewares, api *ap
 }
 
 func setRouter(router *mux.Router, api *api.API) {
-	router.HandleFunc("/", rootPage).Methods("GET")
-	router.HandleFunc("/user", api.UserApi.Signup).Methods("POST")
+	router.HandleFunc("/", rootPage)
+	router.HandleFunc("/user", api.UserApi.Signup)
 }
 
 func rootPage(w http.ResponseWriter, _ *http.Request) {
@@ -52,7 +52,6 @@ func rootPage(w http.ResponseWriter, _ *http.Request) {
 }
 
 func lambdaHandler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	req.HTTPMethod = "POST"
 	res, err := muxAdapter.Proxy(req)
 	if err != nil {
 		log.Println(err)

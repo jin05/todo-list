@@ -70,5 +70,5 @@ functions:
     environment: ${self:custom.environment}
     events:
       - httpApi:
-          method: POST
+          method: '*'
           path: /user
