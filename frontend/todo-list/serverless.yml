@@ -1,2 +1,5 @@
 todo-list:
   component: "@sls-next/serverless-component@1.18.0"
+  inputs:
+    bucketName: "serverless-next-todo-list"
+    name: "serverless-next-todo-list"

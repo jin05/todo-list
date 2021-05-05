@@ -7,8 +7,8 @@ import {
   useAuthFunctions,
 } from "aws-cognito-next";
 
-import pems from "../local_pems.json";
-import localPems from "../local_pems.json";
+import pems from "../pems/pems.json";
+import localPems from "../pems/local_pems.json";
 
 const getServerSideAuth = createGetServerSideAuth({
   pems: process.env.NODE_ENV === "production" ? pems : localPems,
@@ -17,19 +17,25 @@ const useAuth = createUseAuth({
   pems: process.env.NODE_ENV === "production" ? pems : localPems,
 });
 
-const Home = (props: {
-  initialAuth: AuthTokens;
-  userJson: string | undefined;
-}) => {
+const Home = (props: { initialAuth: AuthTokens }) => {
   const auth = useAuth(props.initialAuth);
   const { login, logout } = useAuthFunctions();
 
   useEffect(() => {
-    console.log(props.userJson);
-    if (props.userJson) {
-      window.localStorage.setItem("user", props.userJson);
+    if (auth) {
+      fetch(process.env.API_HOST + "/user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: auth.idToken,
+        },
+      }).then((res) => {
+        res.json().then((value) => {
+          console.log("JSON: " + value);
+        });
+      });
     }
-  }, [props.userJson]);
+  }, [auth]);
 
   return (
     <React.Fragment>
@@ -50,24 +56,9 @@ const Home = (props: {
 
 export const getServerSideProps: GetServerSideProps<{
   initialAuth: AuthTokens;
-  userJson: string | undefined;
 }> = async (context) => {
   const initialAuth = getServerSideAuth(context.req);
-  let userJson: string | undefined;
-  if (initialAuth) {
-    const res = await fetch(
-      process.env.API_HOST || "http://localhost:8080/user",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: initialAuth.idToken,
-        },
-      }
-    );
-    userJson = await res.json();
-  }
-  return { props: { initialAuth, userJson } };
+  return { props: { initialAuth } };
 };
 
 export default Home;
