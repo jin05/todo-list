@@ -19,21 +19,30 @@ var (
 )
 
 func Dispatch(config *config.Config, middlewares middleware.Middlewares, api *api.API) error {
-	router := mux.NewRouter().StrictSlash(true)
-	for _, mw := range middlewares.List() {
-		router.Use(mw)
-	}
-
-	router.HandleFunc("/", rootPage).Methods("GET")
-	router.HandleFunc("/user", api.UserApi.Signup).Methods("POST")
 
 	if config.Server.IsProduction {
+		router := mux.NewRouter()
+		for _, mw := range middlewares.List() {
+			router.Use(mw)
+		}
+		setRouter(router, api)
 		muxAdapter = gorillamux.New(router)
 		lambda.Start(lambdaHandler)
 		return nil
 	}
 
+	router := mux.NewRouter().StrictSlash(true)
+	for _, mw := range middlewares.List() {
+		router.Use(mw)
+	}
+
+	setRouter(router, api)
 	return http.ListenAndServe(fmt.Sprintf(":%s", config.Server.ListenPort), router)
+}
+
+func setRouter(router *mux.Router, api *api.API) {
+	router.HandleFunc("/", rootPage).Methods("GET")
+	router.HandleFunc("/user", api.UserApi.Signup).Methods("POST")
 }
 
 func rootPage(w http.ResponseWriter, _ *http.Request) {
