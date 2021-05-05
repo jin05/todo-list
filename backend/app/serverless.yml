@@ -41,11 +41,6 @@ provider:
       Resource:
         - "*"
 
-  httpApi:
-    cors:
-      allowedOrigins:
-        - https://d2semoivot4v0t.cloudfront.net
-
 custom:
   environment:
     ENV_NAME: ${env:ENV_NAME}
@@ -66,7 +61,10 @@ functions:
     image: 387402613703.dkr.ecr.ap-northeast-1.amazonaws.com/todo-list:${env:IMAGE_TAG}
     environment: ${self:custom.environment}
     events:
-      - httpApi:
-          method: POST
-          path: /user
-          cors: true
+      - http:
+          path: user
+          method: post
+          cors:
+            origins:
+              - https://d2semoivot4v0t.cloudfront.net
+            allowCredentials: false

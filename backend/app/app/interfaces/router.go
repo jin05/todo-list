@@ -42,7 +42,7 @@ func Dispatch(config *config.Config, middlewares middleware.Middlewares, api *ap
 
 func setRouter(router *mux.Router, api *api.API) {
 	router.HandleFunc("/", rootPage)
-	router.HandleFunc("/user", api.UserApi.Signup)
+	router.HandleFunc("/user", api.UserApi.Signup).Methods("POST")
 }
 
 func rootPage(w http.ResponseWriter, _ *http.Request) {
