@@ -53,8 +53,6 @@ func (m *authMiddleware) Handler(w http.ResponseWriter, r *http.Request) (http.R
 		return w, r, err
 	}
 
-	// TODO ユーザの存在チェック(Signinの場合はチェックしない)
-
 	name := ""
 	email := ""
 	if value, ok := token.Get("cognito:username"); ok {

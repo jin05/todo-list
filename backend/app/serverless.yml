@@ -33,6 +33,14 @@ provider:
       Resource:
         - "*"
 
+  httpApi:
+    cors:
+      allowedOrigins:
+        - https://d2semoivot4v0t.cloudfront.net
+      allowedHeaders:
+        - Content-Type
+        - Authorization
+
 custom:
   environment:
     ENV_NAME: ${env:ENV_NAME}
