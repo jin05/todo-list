@@ -1,7 +1,7 @@
 .PHONY: prod
 prod:
 	$(eval ENV_NAME := prod)
-	$(eval LISTEN_PORT := 80)
+	$(eval LISTEN_PORT := 8080)
 	$(eval ALLOW_ORIGIN := https://d11io7xt3kfqky.cloudfront.net)
 
 	@# DB
