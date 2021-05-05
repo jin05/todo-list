@@ -45,9 +45,6 @@ provider:
     cors:
       allowedOrigins:
         - https://d2semoivot4v0t.cloudfront.net
-      allowedHeaders:
-        - Content-Type
-        - Authorization
 
 custom:
   environment:
@@ -70,5 +67,6 @@ functions:
     environment: ${self:custom.environment}
     events:
       - httpApi:
-          method: '*'
+          method: POST
           path: /user
+          cors: true
