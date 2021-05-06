@@ -9,7 +9,7 @@ local:
 	$(eval DB_HOST := 127.0.0.1)
 	$(eval DB_PORT := 3306)
 	$(eval DB_PASSWORD := mysql)
-	$(eval DB_NAME := todo-list)
+	$(eval DB_NAME := todo)
 
 	@# AWS
 	$(eval AWS_USER_POOL_ID := ap-northeast-1_axGAoF8m8)

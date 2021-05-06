@@ -8,7 +8,7 @@ import (
 
 type UserRepository interface {
 	GetByAuthID(authID string) (*domain.User, error)
-	Create(authID string, name string, email string) (*domain.User, error)
+	Save(authID string, name string, email string) (*domain.User, error)
 }
 
 type userRepository struct {
@@ -20,16 +20,20 @@ func NewUserRepository(conn *database.Connection) UserRepository {
 }
 
 func (r *userRepository) GetByAuthID(authID string) (*domain.User, error) {
-	return nil, nil
+	conn := r.conn.DB
+	user := &model.User{}
+	result := conn.Where(&model.User{AuthID: authID}).First(user)
+	return model.ToUserDomain(user), result.Error
 }
 
-func (r *userRepository) Create(authID string, name string, email string) (*domain.User, error) {
+func (r *userRepository) Save(authID string, name string, email string) (*domain.User, error) {
+	conn := r.conn.DB
 	user := &model.User{
 		UserName: name,
 		AuthID:   authID,
 		Email:    email,
 	}
-	err := r.conn.DB.Create(user).Error
+	err := conn.Create(user).Error
 	if err != nil {
 		return nil, err
 	}

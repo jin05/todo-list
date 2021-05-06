@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"todo-list/app/interfaces/middleware"
 	"todo-list/app/usecase"
@@ -20,20 +19,19 @@ func NewUserAPI(userUseCase usecase.UserUseCase) UserAPI {
 	return &userAPI{userUseCase: userUseCase}
 }
 
-func (i *userAPI) Signup(w http.ResponseWriter, r *http.Request) {
+func (a *userAPI) Signup(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	// ユーザ情報を取得
 	cUser := middleware.UserForContext(ctx)
 
-	user, err := i.userUseCase.Create(cUser.AuthID, cUser.Name, cUser.Email)
+	user, err := a.userUseCase.Save(cUser.AuthID, cUser.Name, cUser.Email)
 	if err != nil {
-		log.Println(err)
-		http.Error(w, "InternalServerError", http.StatusInternalServerError)
+		middleware.SetError(ctx, err)
+		return
 	}
 
 	if err = json.NewEncoder(w).Encode(user); err != nil {
-		log.Println(err)
-		http.Error(w, "InternalServerError", http.StatusInternalServerError)
+		middleware.SetError(ctx, err)
 	}
 }

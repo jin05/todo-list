@@ -29,20 +29,26 @@ func Dispatch(config *config.Config, middlewares middleware.Middlewares, api *ap
 		muxAdapter = gorillamux.New(router)
 		lambda.Start(lambdaHandler)
 		return nil
+	} else {
+
+		router := mux.NewRouter().StrictSlash(true)
+		for _, mw := range middlewares.List() {
+			router.Use(mw)
+		}
+		setRouter(router, api)
+		return http.ListenAndServe(fmt.Sprintf(":%s", config.Server.ListenPort), router)
 	}
 
-	router := mux.NewRouter().StrictSlash(true)
-	for _, mw := range middlewares.List() {
-		router.Use(mw)
-	}
-
-	setRouter(router, api)
-	return http.ListenAndServe(fmt.Sprintf(":%s", config.Server.ListenPort), router)
 }
 
 func setRouter(router *mux.Router, api *api.API) {
-	router.HandleFunc("/", rootPage)
-	router.HandleFunc("/user", api.UserApi.Signup).Methods("POST")
+	router.HandleFunc("/", rootPage).Methods("GET")
+	router.HandleFunc("/user", api.UserApi.Signup).Methods("POST", "OPTIONS")
+	router.HandleFunc("/todo", api.TodoAPI.Get).Methods("GET", "OPTIONS")
+	router.HandleFunc("/todo", api.TodoAPI.Create).Methods("POST", "OPTIONS")
+	router.HandleFunc("/todo", api.TodoAPI.Update).Methods("PUT", "OPTIONS")
+	router.HandleFunc("/todo", api.TodoAPI.Delete).Methods("DELETE", "OPTIONS")
+	router.HandleFunc("/todo/list", api.TodoAPI.List).Methods("GET", "OPTIONS")
 }
 
 func rootPage(w http.ResponseWriter, _ *http.Request) {
