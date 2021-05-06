@@ -26,7 +26,7 @@ module.exports = (phase) => {
           REDIRECT_SIGN_OUT: "https://d2semoivot4v0t.cloudfront.net/",
           AUTH_COOKIE_DOMAIN: "d2semoivot4v0t.cloudfront.net",
           API_HOST:
-            "https://xn8hqr060e.execute-api.ap-northeast-1.amazonaws.com",
+            "https://ijonaj9rti.execute-api.ap-northeast-1.amazonaws.com/prod",
         },
       };
   }
