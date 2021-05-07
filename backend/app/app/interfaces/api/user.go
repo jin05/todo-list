@@ -37,11 +37,11 @@ func (a *userAPI) Signup(w http.ResponseWriter, r *http.Request) {
 
 	user, err := a.userUseCase.Save(cUser.AuthID, cUser.Name, cUser.Email)
 	if err != nil {
-		middleware.SetError(ctx, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	if err = json.NewEncoder(w).Encode(user); err != nil {
-		middleware.SetError(ctx, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }

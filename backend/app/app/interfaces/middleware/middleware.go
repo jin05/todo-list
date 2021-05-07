@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"context"
 	"log"
 	"net/http"
 )
@@ -36,27 +35,9 @@ func (m *middlewares) Middleware(handler Handler) func(http.Handler) http.Handle
 			w, r, err := handler(w, r)
 			if err == nil {
 				next.ServeHTTP(w, r)
-				err = errorForContext(r.Context())
-				if err != nil {
-					log.Println(err)
-					http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-				}
 			} else {
 				log.Println(err)
 			}
 		})
 	}
-}
-
-type errorContextKey struct{}
-
-var errorKey = errorContextKey{}
-
-func SetError(ctx context.Context, err error) context.Context {
-	return context.WithValue(ctx, errorKey, err)
-}
-
-func errorForContext(ctx context.Context) error {
-	row, _ := ctx.Value(errorKey).(error)
-	return row
 }

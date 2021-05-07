@@ -67,18 +67,18 @@ func (a *todoAPI) Get(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	todoID, err := strconv.ParseInt(vars["todoID"], 10, 64)
 	if err != nil {
-		middleware.SetError(ctx, err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	todo, err := a.todoUseCase.Get(cUser.AuthID, todoID)
 	if err != nil {
-		middleware.SetError(ctx, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	if err = json.NewEncoder(w).Encode(todo); err != nil {
-		middleware.SetError(ctx, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
@@ -91,18 +91,18 @@ func (a *todoAPI) Create(w http.ResponseWriter, r *http.Request) {
 	input := createInput{}
 	reqBody, _ := ioutil.ReadAll(r.Body)
 	if err := json.Unmarshal(reqBody, &input); err != nil {
-		middleware.SetError(ctx, err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	todo, err := a.todoUseCase.Create(cUser.AuthID, input.Title, input.Content)
 	if err != nil {
-		middleware.SetError(ctx, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	if err = json.NewEncoder(w).Encode(todo); err != nil {
-		middleware.SetError(ctx, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
@@ -115,18 +115,18 @@ func (a *todoAPI) Update(w http.ResponseWriter, r *http.Request) {
 	input := updateInput{}
 	reqBody, _ := ioutil.ReadAll(r.Body)
 	if err := json.Unmarshal(reqBody, &input); err != nil {
-		middleware.SetError(ctx, err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	todo, err := a.todoUseCase.Update(cUser.AuthID, input.TodoID, input.Title, input.Content, input.Checked)
 	if err != nil {
-		middleware.SetError(ctx, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	if err = json.NewEncoder(w).Encode(todo); err != nil {
-		middleware.SetError(ctx, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
@@ -139,17 +139,17 @@ func (a *todoAPI) Delete(w http.ResponseWriter, r *http.Request) {
 	input := deleteInput{}
 	reqBody, _ := ioutil.ReadAll(r.Body)
 	if err := json.Unmarshal(reqBody, &input); err != nil {
-		middleware.SetError(ctx, err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	if err := a.todoUseCase.Delete(cUser.AuthID, input.TodoID); err != nil {
-		middleware.SetError(ctx, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	if err := json.NewEncoder(w).Encode(input); err != nil {
-		middleware.SetError(ctx, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
@@ -168,6 +168,6 @@ func (a *todoAPI) List(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err = json.NewEncoder(w).Encode(todoList); err != nil {
-		middleware.SetError(ctx, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
