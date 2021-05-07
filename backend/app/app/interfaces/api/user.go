@@ -8,6 +8,7 @@ import (
 )
 
 type UserAPI interface {
+	Handler(w http.ResponseWriter, r *http.Request)
 	Signup(w http.ResponseWriter, r *http.Request)
 }
 
@@ -17,6 +18,15 @@ type userAPI struct {
 
 func NewUserAPI(userUseCase usecase.UserUseCase) UserAPI {
 	return &userAPI{userUseCase: userUseCase}
+}
+
+func (a *userAPI) Handler(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodOptions:
+		return
+	case http.MethodPost:
+		a.Signup(w, r)
+	}
 }
 
 func (a *userAPI) Signup(w http.ResponseWriter, r *http.Request) {

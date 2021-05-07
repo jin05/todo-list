@@ -39,8 +39,10 @@ func (m *middlewares) Middleware(handler Handler) func(http.Handler) http.Handle
 				err = errorForContext(r.Context())
 				if err != nil {
 					log.Println(err)
-					http.Error(w, "InternalServerError", http.StatusInternalServerError)
+					http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 				}
+			} else {
+				log.Println(err)
 			}
 		})
 	}

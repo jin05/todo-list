@@ -11,7 +11,7 @@ type Todo struct {
 	UserID    int64
 	Title     string    `ddl:"size=255"`
 	Content   string    `ddl:"type=longtext"`
-	Check     bool      `ddl:"default=false"`
+	Checked   bool      `ddl:"default=false"`
 	CreatedAt time.Time `ddl:"default=CURRENT_TIMESTAMP"`
 	UpdatedAt time.Time `ddl:"default=CURRENT_TIMESTAMP"`
 }

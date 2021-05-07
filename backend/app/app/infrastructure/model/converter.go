@@ -17,7 +17,7 @@ func ToTodoDomain(todo *Todo) *domain.Todo {
 		UserID:  todo.UserID,
 		Title:   todo.Title,
 		Content: todo.Content,
-		Check:   todo.Check,
+		Checked: todo.Checked,
 	}
 }
 

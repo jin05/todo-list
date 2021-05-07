@@ -10,7 +10,7 @@ import (
 type TodoUseCase interface {
 	Get(authID string, todoID int64) (*domain.Todo, error)
 	Create(authID string, title string, content string) (*domain.Todo, error)
-	Update(authID string, todoID int64, title string, content string, check bool) error
+	Update(authID string, todoID int64, title string, content string, checked bool) (*domain.Todo, error)
 	Delete(authID string, todoID int64) error
 	List(authID string, keyWard string) ([]*domain.Todo, error)
 }
@@ -49,12 +49,25 @@ func (u *todoUseCase) Create(authID string, title string, content string) (*doma
 	return u.todoRepository.Save(user.UserID, title, content)
 }
 
-func (u *todoUseCase) Update(authID string, todoID int64, title string, content string, check bool) error {
+func (u *todoUseCase) Update(authID string, todoID int64, title string, content string, checked bool) (*domain.Todo, error) {
 	user, err := u.userRepository.GetByAuthID(authID)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return u.todoRepository.Update(user.UserID, todoID, title, content, check)
+
+	todo, err := u.todoRepository.Get(user.UserID, todoID)
+	if err != nil {
+		return nil, err
+	}
+
+	if err = u.todoRepository.Update(user.UserID, todoID, title, content, checked); err != nil {
+		return nil, err
+	}
+
+	todo.Title = title
+	todo.Content = content
+	todo.Checked = checked
+	return todo, nil
 }
 
 func (u *todoUseCase) Delete(authID string, todoID int64) error {

@@ -5,5 +5,5 @@ type Todo struct {
 	UserID  int64
 	Title   string
 	Content string
-	Check   bool
+	Checked bool
 }

@@ -19,7 +19,7 @@ type updateInput struct {
 	TodoID  int64  `json:"todoID"`
 	Title   string `json:"title"`
 	Content string `json:"content"`
-	Check   bool   `json:"check"`
+	Checked bool   `json:"checked"`
 }
 
 type deleteInput struct {
@@ -27,6 +27,7 @@ type deleteInput struct {
 }
 
 type TodoAPI interface {
+	Handler(w http.ResponseWriter, r *http.Request)
 	Get(w http.ResponseWriter, r *http.Request)
 	Create(w http.ResponseWriter, r *http.Request)
 	Update(w http.ResponseWriter, r *http.Request)
@@ -40,6 +41,21 @@ type todoAPI struct {
 
 func NewTodoAPI(todoUseCase usecase.TodoUseCase) TodoAPI {
 	return &todoAPI{todoUseCase: todoUseCase}
+}
+
+func (a *todoAPI) Handler(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodOptions:
+		return
+	case http.MethodGet:
+		a.Get(w, r)
+	case http.MethodPost:
+		a.Create(w, r)
+	case http.MethodPut:
+		a.Update(w, r)
+	case http.MethodDelete:
+		a.Delete(w, r)
+	}
 }
 
 func (a *todoAPI) Get(w http.ResponseWriter, r *http.Request) {
@@ -103,12 +119,13 @@ func (a *todoAPI) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := a.todoUseCase.Update(cUser.AuthID, input.TodoID, input.Title, input.Content, input.Check); err != nil {
+	todo, err := a.todoUseCase.Update(cUser.AuthID, input.TodoID, input.Title, input.Content, input.Checked)
+	if err != nil {
 		middleware.SetError(ctx, err)
 		return
 	}
 
-	if err := json.NewEncoder(w).Encode(input); err != nil {
+	if err = json.NewEncoder(w).Encode(todo); err != nil {
 		middleware.SetError(ctx, err)
 	}
 }

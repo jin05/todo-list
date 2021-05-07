@@ -22,7 +22,7 @@ CREATE TABLE `todos` (
     `user_id` BIGINT NOT NULL,
     `title` VARCHAR(255) NOT NULL,
     `content` LONGTEXT NOT NULL,
-    `check` TINYINT(1) NOT NULL DEFAULT false,
+    `checked` TINYINT(1) NOT NULL DEFAULT false,
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     INDEX `user_id_idx` (`user_id`),

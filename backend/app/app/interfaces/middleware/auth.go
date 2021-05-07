@@ -31,6 +31,10 @@ func NewAuthMiddleware(conf *config.Config) (AuthMiddleware, error) {
 }
 
 func (m *authMiddleware) Handler(w http.ResponseWriter, r *http.Request) (http.ResponseWriter, *http.Request, error) {
+	if r.Method == http.MethodOptions {
+		return w, r, nil
+	}
+
 	ctx := r.Context()
 
 	// IDトークンの検証
@@ -69,7 +73,6 @@ func (m *authMiddleware) Handler(w http.ResponseWriter, r *http.Request) (http.R
 	ctx = SetUser(ctx, user)
 
 	r = r.WithContext(ctx)
-	w.Header().Set("Content-Type", "application/json")
 	return w, r, nil
 }
 

@@ -42,13 +42,10 @@ func Dispatch(config *config.Config, middlewares middleware.Middlewares, api *ap
 }
 
 func setRouter(router *mux.Router, api *api.API) {
-	router.HandleFunc("/", rootPage).Methods("GET")
-	router.HandleFunc("/user", api.UserApi.Signup).Methods("POST", "OPTIONS")
-	router.HandleFunc("/todo", api.TodoAPI.Get).Methods("GET", "OPTIONS")
-	router.HandleFunc("/todo", api.TodoAPI.Create).Methods("POST", "OPTIONS")
-	router.HandleFunc("/todo", api.TodoAPI.Update).Methods("PUT", "OPTIONS")
-	router.HandleFunc("/todo", api.TodoAPI.Delete).Methods("DELETE", "OPTIONS")
-	router.HandleFunc("/todo/list", api.TodoAPI.List).Methods("GET", "OPTIONS")
+	router.HandleFunc("/", rootPage).Methods(http.MethodGet)
+	router.HandleFunc("/user", api.UserApi.Handler).Methods(http.MethodOptions, http.MethodPost)
+	router.HandleFunc("/todo", api.TodoAPI.Handler).Methods(http.MethodOptions, http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete)
+	router.HandleFunc("/todo/list", api.TodoAPI.List).Methods(http.MethodGet)
 }
 
 func rootPage(w http.ResponseWriter, _ *http.Request) {
