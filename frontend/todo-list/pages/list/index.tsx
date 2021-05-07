@@ -44,7 +44,7 @@ const List = (props: { todoList: Todo[] }) => {
   const router = useRouter();
 
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [todoList, setTodoList] = useState(props.todoList);
+  const [todoList, setTodoList] = useState<Todo[]>(props.todoList || []);
   const [target, setTarget] = useState<Todo | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<Todo | null>(null);
   const [
@@ -159,7 +159,7 @@ const List = (props: { todoList: Todo[] }) => {
           </SearchForm>
         </OperationArea>
         <MuiList>
-          {props.todoList.map((todo) => {
+          {todoList.map((todo) => {
             return (
               <ListItem
                 key={todo.TodoID}
