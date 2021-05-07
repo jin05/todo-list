@@ -1,5 +1,4 @@
 import { getIdToken } from "./cookieHelper";
-import { useRouter } from "next/router";
 
 export type CreateInput = {
   title: string;
@@ -10,7 +9,7 @@ export type UpdateInput = {
   todoID: number;
   title: string;
   content: string;
-  check: boolean;
+  checked: boolean;
 };
 
 export type DeleteInput = {
@@ -40,7 +39,6 @@ export const todoApiRequest = async (
   if (res.ok) {
     return JSON.stringify(await res.json());
   } else {
-    console.error(`${res.status}:${res.statusText}`);
     if (res.status === 403) {
       if (typeof window !== "undefined") {
         window.location.href = "/";

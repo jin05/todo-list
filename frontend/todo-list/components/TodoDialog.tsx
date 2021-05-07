@@ -37,7 +37,7 @@ export const TodoDialog = (props: Props) => {
         todoID: props.todo.TodoID,
         title: title,
         content: content,
-        check: props.todo.Checked,
+        checked: props.todo.Checked,
       } as UpdateInput;
     } else {
       method = "POST";
