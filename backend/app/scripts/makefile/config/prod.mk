@@ -2,7 +2,7 @@
 prod:
 	$(eval ENV_NAME := prod)
 	$(eval LISTEN_PORT := 8080)
-	$(eval ALLOW_ORIGIN := https://d11io7xt3kfqky.cloudfront.net)
+	$(eval ALLOW_ORIGIN := https://d2semoivot4v0t.cloudfront.net)
 
 	@# DB
 	$(eval DB_SECRET_NAME := rds)
