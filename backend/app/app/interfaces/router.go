@@ -45,7 +45,7 @@ func setRouter(router *mux.Router, api *api.API) {
 	router.HandleFunc("/", rootPage).Methods(http.MethodGet)
 	router.HandleFunc("/user", api.UserApi.Handler).Methods(http.MethodOptions, http.MethodPost)
 	router.HandleFunc("/todo", api.TodoAPI.Handler).Methods(http.MethodOptions, http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete)
-	router.HandleFunc("/todo/list", api.TodoAPI.List).Methods(http.MethodGet)
+	router.HandleFunc("/todo/list", api.TodoAPI.List).Methods(http.MethodOptions, http.MethodGet).Queries("keyword", "{keyword}", "searchTarget", "{searchTarget}")
 }
 
 func rootPage(w http.ResponseWriter, _ *http.Request) {

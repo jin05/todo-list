@@ -154,15 +154,20 @@ func (a *todoAPI) Delete(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *todoAPI) List(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodOptions {
+		return
+	}
+
 	ctx := r.Context()
 
 	// ユーザ情報を取得
 	cUser := middleware.UserForContext(ctx)
 
 	vars := mux.Vars(r)
-	keyWard := vars["keyWard"]
+	keyword := vars["keyword"]
+	searchTarget := vars["searchTarget"]
 
-	todoList, err := a.todoUseCase.List(cUser.AuthID, keyWard)
+	todoList, err := a.todoUseCase.List(cUser.AuthID, keyword, searchTarget)
 	if err != nil {
 		return
 	}

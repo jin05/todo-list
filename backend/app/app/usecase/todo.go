@@ -12,7 +12,7 @@ type TodoUseCase interface {
 	Create(authID string, title string, content string) (*domain.Todo, error)
 	Update(authID string, todoID int64, title string, content string, checked bool) (*domain.Todo, error)
 	Delete(authID string, todoID int64) error
-	List(authID string, keyWard string) ([]*domain.Todo, error)
+	List(authID string, keyword string, searchTarget string) ([]*domain.Todo, error)
 }
 
 type todoUseCase struct {
@@ -78,12 +78,12 @@ func (u *todoUseCase) Delete(authID string, todoID int64) error {
 	return u.todoRepository.Delete(user.UserID, todoID)
 }
 
-func (u *todoUseCase) List(authID string, keyWard string) ([]*domain.Todo, error) {
+func (u *todoUseCase) List(authID string, keyword string, searchTarget string) ([]*domain.Todo, error) {
 	user, err := u.userRepository.GetByAuthID(authID)
 	if err != nil {
 		return nil, err
 	}
 
-	keyWards := strings.Fields(keyWard)
-	return u.todoRepository.List(user.UserID, keyWards)
+	keywords := strings.Fields(keyword)
+	return u.todoRepository.List(user.UserID, keywords, searchTarget)
 }
