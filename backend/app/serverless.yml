@@ -68,3 +68,38 @@ functions:
             origins:
               - https://d2semoivot4v0t.cloudfront.net
             allowCredentials: false
+      - http:
+          path: todo
+          method: get
+          cors:
+            origins:
+              - https://d2semoivot4v0t.cloudfront.net
+            allowCredentials: false
+      - http:
+          path: todo
+          method: post
+          cors:
+            origins:
+              - https://d2semoivot4v0t.cloudfront.net
+            allowCredentials: false
+      - http:
+          path: todo
+          method: put
+          cors:
+            origins:
+              - https://d2semoivot4v0t.cloudfront.net
+            allowCredentials: false
+      - http:
+          path: todo
+          method: delete
+          cors:
+            origins:
+              - https://d2semoivot4v0t.cloudfront.net
+            allowCredentials: false
+      - http:
+          path: todo/list
+          method: get
+          cors:
+            origins:
+              - https://d2semoivot4v0t.cloudfront.net
+            allowCredentials: false
