@@ -1,12 +1,13 @@
 import Document, {
   DocumentContext,
-  Html,
   Head,
+  Html,
   Main,
   NextScript,
 } from "next/document";
 import { ServerStyleSheet as StyledComponentSheets } from "styled-components";
 import { ServerStyleSheets as MaterialUiServerStyleSheets } from "@material-ui/styles";
+import Theme from "../components/Theme";
 
 export default class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
@@ -42,8 +43,16 @@ export default class MyDocument extends Document {
   render() {
     return (
       <Html lang="ja">
-        <Head />
-        <body>
+        <Head>
+          {/* PWA primary color */}
+          <meta name="theme-color" content={Theme.palette.primary.main} />
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+          />
+          <style>{`body { margin: 0; background-color: #fafafa;  } /* custom!*/`}</style>
+        </Head>
+        <body className="custom_class">
           <Main />
           <NextScript />
         </body>

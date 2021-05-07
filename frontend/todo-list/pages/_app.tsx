@@ -1,13 +1,9 @@
 import React, { useEffect } from "react";
 import { AppProps } from "next/app";
-import { ThemeProvider as StyledComponentsThemeProvider } from "styled-components";
-import { ThemeProvider as MaterialUIThemeProvider } from "@material-ui/core/styles";
-import { StylesProvider } from "@material-ui/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import Layout from "../components/Layout";
-import Theme from "../components/Theme";
 import { Amplify } from "@aws-amplify/core";
 import { Auth } from "@aws-amplify/auth";
+import Head from "next/head";
 
 Amplify.configure({
   Auth: {
@@ -56,16 +52,14 @@ const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
   }, []);
 
   return (
-    <StylesProvider injectFirst>
-      <MaterialUIThemeProvider theme={Theme}>
-        <StyledComponentsThemeProvider theme={Theme}>
-          <CssBaseline />
-          <Layout title="Todo List">
-            <Component {...pageProps} />
-          </Layout>
-        </StyledComponentsThemeProvider>
-      </MaterialUIThemeProvider>
-    </StylesProvider>
+    <Layout>
+      <Head>
+        <title>{"My Todo List"}</title>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+      <Component {...pageProps} />
+    </Layout>
   );
 };
 
