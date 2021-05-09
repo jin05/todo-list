@@ -164,8 +164,8 @@ func Test_todoAPI_Delete(t *testing.T) {
 		r = mux.SetURLVars(r, map[string]string{"todoID": "1"})
 
 		api.Delete(w, r)
-		assert.Equal(t, http.StatusOK, w.Code)
-		assert.Equal(t, string(rBody)+"\n", w.Body.String())
+		assert.Equal(t, http.StatusNoContent, w.Code)
+		assert.Equal(t, 0, w.Body.Len())
 	})
 }
 

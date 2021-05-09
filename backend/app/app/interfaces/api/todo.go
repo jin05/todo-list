@@ -104,6 +104,8 @@ func (a *todoAPI) Create(w http.ResponseWriter, r *http.Request) {
 	if err = json.NewEncoder(w).Encode(todo); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+
+	w.WriteHeader(http.StatusCreated)
 }
 
 func (a *todoAPI) Update(w http.ResponseWriter, r *http.Request) {
@@ -148,9 +150,7 @@ func (a *todoAPI) Delete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := json.NewEncoder(w).Encode(input); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
+	w.WriteHeader(http.StatusNoContent)
 }
 
 func (a *todoAPI) List(w http.ResponseWriter, r *http.Request) {
