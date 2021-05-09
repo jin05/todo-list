@@ -1,0 +1,444 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "todo-list",
+    "version": "1.0",
+    "description": "TodoListを管理するAPI"
+  },
+  "servers": [
+    {
+      "url": "https://ijonaj9rti.execute-api.ap-northeast-1.amazonaws.com/prod"
+    }
+  ],
+  "paths": {
+    "/user": {
+      "post": {
+        "summary": "ユーザの新規作成",
+        "operationId": "post-user",
+        "description": "ユーザを新規に作成する。\n既に作成されている場合は、ユーザ情報を取得する。",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "CognitoのidToken",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "UserID": {
+                      "type": "number",
+                      "description": "ユーザ情報のユニークID"
+                    },
+                    "UserName": {
+                      "type": "string",
+                      "description": "AWS Cognito に登録されたユーザ名"
+                    },
+                    "AuthID": {
+                      "type": "string",
+                      "description": "AWS Cognito に登録されたユニークID"
+                    },
+                    "Email": {
+                      "type": "string",
+                      "description": "AWS Cognito に登録されたEメールアドレス"
+                    }
+                  },
+                  "required": [
+                    "UserID",
+                    "UserName",
+                    "AuthID",
+                    "Email"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/todo": {
+      "get": {
+        "summary": "Todo情報の取得",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "TodoID": {
+                      "type": "number",
+                      "description": "Todo情報のユニークID"
+                    },
+                    "UserID": {
+                      "type": "number",
+                      "description": "ユーザ情報のユニークID"
+                    },
+                    "Title": {
+                      "type": "string",
+                      "description": "Todo情報のタイトル"
+                    },
+                    "Content": {
+                      "type": "string",
+                      "description": "Todo情報の内容"
+                    },
+                    "Checked": {
+                      "type": "boolean",
+                      "description": "完了フラグ"
+                    }
+                  },
+                  "required": [
+                    "TodoID",
+                    "UserID",
+                    "Title",
+                    "Content",
+                    "Checked"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-todo",
+        "description": "Todo情報を取得する",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "todoID",
+            "required": true,
+            "description": "Todo情報のユニークID"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "required": true,
+            "name": "Authorization",
+            "description": "CognitoのidToken"
+          }
+        ]
+      },
+      "post": {
+        "summary": "Todo情報の新規登録",
+        "operationId": "post-todo",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "Todo情報のタイトル"
+                  },
+                  "content": {
+                    "type": "string",
+                    "description": "Todo情報の内容"
+                  }
+                },
+                "required": [
+                  "title",
+                  "content"
+                ]
+              },
+              "examples": {
+                "example": {
+                  "value": {
+                    "title": "todo title",
+                    "content": "todo content"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "新規にTodo情報を登録する",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "required": true,
+            "name": "Authorization",
+            "description": "AWS CognitoのidToken"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "TodoID": {
+                      "type": "number",
+                      "description": "Todo情報のユニークID"
+                    },
+                    "UserID": {
+                      "type": "number",
+                      "description": "ユーザ情報のユニークID"
+                    },
+                    "Title": {
+                      "type": "string",
+                      "description": "Todo情報のタイトル"
+                    },
+                    "Content": {
+                      "type": "string",
+                      "description": "Todo情報の内容"
+                    },
+                    "Checked": {
+                      "type": "boolean",
+                      "description": "完了フラグ"
+                    }
+                  },
+                  "required": [
+                    "TodoID",
+                    "UserID",
+                    "Title",
+                    "Content",
+                    "Checked"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Todo情報の更新",
+        "operationId": "put-todo",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "TodoID": {
+                      "type": "number",
+                      "description": "Todo情報のユニークID"
+                    },
+                    "UserID": {
+                      "type": "number",
+                      "description": "ユーザ情報のユニークID"
+                    },
+                    "Title": {
+                      "type": "string",
+                      "description": "Todo情報のタイトル"
+                    },
+                    "Content": {
+                      "type": "string",
+                      "description": "Todo情報の内容"
+                    },
+                    "Checked": {
+                      "type": "boolean",
+                      "description": "完了フラグ"
+                    }
+                  },
+                  "required": [
+                    "TodoID",
+                    "UserID",
+                    "Title",
+                    "Content",
+                    "Checked"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "AWS CognitoのidToken",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "TodoID": {
+                    "type": "number",
+                    "description": "Todo情報のユニークID"
+                  },
+                  "Title": {
+                    "type": "string",
+                    "description": "Todo情報のタイトル"
+                  },
+                  "Content": {
+                    "type": "string",
+                    "description": "Todo情報の内容"
+                  },
+                  "Checked": {
+                    "type": "boolean",
+                    "description": "完了フラグ"
+                  }
+                },
+                "required": [
+                  "TodoID",
+                  "Title",
+                  "Content",
+                  "Checked"
+                ]
+              }
+            }
+          }
+        },
+        "description": "Todo情報を更新する"
+      },
+      "delete": {
+        "summary": "Todo情報の削除",
+        "operationId": "delete-todo",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "description": "Todo情報を削除する",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "AWS CognitoのidToken",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "TodoID": {
+                    "type": "number",
+                    "description": "Todo情報のユニークID"
+                  }
+                },
+                "required": [
+                  "TodoID"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/todo/list": {
+      "get": {
+        "summary": "Todo情報一覧の取得",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "TodoID": {
+                        "type": "number",
+                        "description": "Todo情報のユニークID"
+                      },
+                      "UserID": {
+                        "type": "number",
+                        "description": "ユーザ情報のユニークID"
+                      },
+                      "Title": {
+                        "type": "string",
+                        "description": "Todo情報のタイトル"
+                      },
+                      "Content": {
+                        "type": "string",
+                        "description": "Todo情報の内容"
+                      },
+                      "Checked": {
+                        "type": "boolean",
+                        "description": "完了フラグ"
+                      }
+                    },
+                    "required": [
+                      "TodoID",
+                      "UserID",
+                      "Title",
+                      "Content",
+                      "Checked"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-todo-list",
+        "description": "Todo情報の一覧を取得する",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "Authorization",
+            "description": "CognitoのidToken",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "keyword",
+            "description": "検索ワード。スペースで区切られているとAND検索を行う。"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "title",
+                "content"
+              ]
+            },
+            "in": "query",
+            "name": "searchTarget",
+            "description": "検索対象"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "securitySchemes": {}
+  }
+}
