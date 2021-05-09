@@ -17,7 +17,7 @@ func GetDBMock(f func(conn *database.Connection, mock sqlmock.Sqlmock)) error {
 		return err
 	}
 
-	mock.ExpectQuery(regexp.QuoteMeta(`SELECT VERSION()`)).WillReturnRows(sqlmock.NewRows([]string{"VERSION()"}).AddRow("5.6"))
+	mock.ExpectQuery(regexp.QuoteMeta(`SELECT VERSION()`)).WillReturnRows(sqlmock.NewRows([]string{"VERSION()"}).AddRow("5.7"))
 	gdb, err := gorm.Open(mysql.New(mysql.Config{Conn: sqlDB}), &gorm.Config{})
 	if err != nil {
 		return err

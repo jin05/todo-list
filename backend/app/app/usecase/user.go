@@ -5,7 +5,7 @@ import (
 	"gorm.io/gorm"
 	"todo-list/app/domain"
 	"todo-list/app/infrastructure/database"
-	repository2 "todo-list/app/infrastructure/repository"
+	"todo-list/app/infrastructure/repository"
 )
 
 type UserUseCase interface {
@@ -15,10 +15,10 @@ type UserUseCase interface {
 
 type userUseCase struct {
 	conn           *database.Connection
-	userRepository repository2.UserRepository
+	userRepository repository.UserRepository
 }
 
-func NewUserUseCase(conn *database.Connection, userRepository repository2.UserRepository) UserUseCase {
+func NewUserUseCase(conn *database.Connection, userRepository repository.UserRepository) UserUseCase {
 	return &userUseCase{conn: conn, userRepository: userRepository}
 }
 

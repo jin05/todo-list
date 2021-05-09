@@ -3,7 +3,6 @@ package usecase
 import (
 	"strings"
 	"todo-list/app/domain"
-	"todo-list/app/infrastructure/database"
 	"todo-list/app/infrastructure/repository"
 )
 
@@ -16,18 +15,15 @@ type TodoUseCase interface {
 }
 
 type todoUseCase struct {
-	conn           *database.Connection
 	todoRepository repository.TodoRepository
 	userRepository repository.UserRepository
 }
 
 func NewTodoUseCase(
-	conn *database.Connection,
 	todoRepository repository.TodoRepository,
 	userRepository repository.UserRepository,
 ) TodoUseCase {
 	return &todoUseCase{
-		conn:           conn,
 		todoRepository: todoRepository,
 		userRepository: userRepository,
 	}
