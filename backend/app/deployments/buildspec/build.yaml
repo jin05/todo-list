@@ -7,7 +7,7 @@ phases:
       - $(aws ecr get-login --no-include-email --region ap-northeast-1)
 
       - echo setting IMAGE_TAG...
-      - if [ "$FORCE_IMAGE_TAG" != "" ]; then export IMAGE_TAG=$FORCE_IMAGE_TAG; elif [ "$CODEBUILD_RESOLVED_SOURCE_VERSION" != "" ]; then export IMAGE_TAG=$CODEBUILD_RESOLVED_SOURCE_VERSION; elif [ "$IMAGE_TAG" = "" ]; then export IMAGE_TAG=$(git rev-parse HEAD); fi
+      - if [ "$FORCE_IMAGE_TAG" != "" ]; then export IMAGE_TAG=$FORCE_IMAGE_TAG; elif [ "$CODEBUILD_RESOLVED_SOURCE_VERSION" != "" ]; then export IMAGE_TAG=$CODEBUILD_RESOLVED_SOURCE_VERSION; elif [ "$IMAGE_TAG" = "" ]; then export IMAGE_TAG=latest; fi
   build:
     commands:
       - echo Building the Docker image...

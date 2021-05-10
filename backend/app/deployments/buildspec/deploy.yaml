@@ -20,9 +20,11 @@ phases:
       - echo "[todo]" >> ~/.aws/credentials
       - echo "aws_access_key_id = ${AWS_ACCESS_KEY_ID}" >> ~/.aws/credentials
       - echo "aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}" >> ~/.aws/credentials
+
+      - echo setting IMAGE_TAG...
+      - if [ "$FORCE_IMAGE_TAG" != "" ]; then export IMAGE_TAG=$FORCE_IMAGE_TAG; elif [ "$CODEBUILD_RESOLVED_SOURCE_VERSION" != "" ]; then export IMAGE_TAG=$CODEBUILD_RESOLVED_SOURCE_VERSION; elif [ "$IMAGE_TAG" = "" ]; then export IMAGE_TAG=latest; fi
   build:
     commands:
       - cd backend/app
       - make db_migrate
-      - export IMAGE_TAG=$(git rev-parse HEAD)
       - make $ENV_NAME deploy
